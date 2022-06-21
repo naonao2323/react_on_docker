@@ -1,0 +1,20 @@
+FROM node:16.13.0 as build-stage
+
+WORKDIR /web/
+
+COPY /app/package.json .
+COPY /app/yarn.lock .
+
+RUN yarn install
+
+COPY ./app/ .
+
+RUN yarn run build
+
+FROM nginx:latest as production-stage
+
+WORKDIR /app
+
+COPY --from=build-stage /web/build/ /app/
+
+COPY /etc/default.conf /etc/nginx/conf.d/

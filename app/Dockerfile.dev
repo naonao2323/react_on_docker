@@ -1,0 +1,11 @@
+FROM node:16.13.0
+
+WORKDIR /web
+
+COPY /app/package.json .
+COPY /app/yarn.lock .
+
+RUN yarn install
+
+COPY /app .
+
